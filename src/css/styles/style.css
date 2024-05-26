@@ -538,6 +538,12 @@ header .header-col.mid .social-icons {
   min-height: 360px;
 }
 
+/* css edit carousel */
+
+.keen-slider__slide {
+  display: flex;
+}
+
 /* ================================================== */
 
 /* navigation */
