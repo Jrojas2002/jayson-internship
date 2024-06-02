@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import Countdown from "../UI/Countdown";
+import Skeleton from "../UI/Skeleton";
 
 const ExploreItems = () => {
   const [exploreItems, setExploreItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [visibleCount, setVisibleCount] = useState(8);
 
   useEffect(() => {
     async function fetchExploreItems() {
@@ -14,14 +16,32 @@ const ExploreItems = () => {
       );
       setExploreItems(data);
       setLoading(false);
+      setVisibleCount(8);
     }
     fetchExploreItems();
   }, []);
 
+  async function filterExplore(value) {
+    if (value) {
+      const { data } = await axios.get(
+        `https://us-central1-nft-cloud-functions.cloudfunctions.net/explore?filter=${value}`
+      );
+      setExploreItems(data);
+    }
+  }
+
+  function loadMore() {
+    setVisibleCount((prevCount) => prevCount + 4);
+  }
+
   return (
     <>
       <div>
-        <select id="filter-items" defaultValue="">
+        <select
+          id="filter-items"
+          defaultValue=""
+          onChange={(event) => filterExplore(event.target.value)}
+        >
           <option value="">Default</option>
           <option value="price_low_to_high">Price, Low to High</option>
           <option value="price_high_to_low">Price, High to Low</option>
@@ -29,17 +49,16 @@ const ExploreItems = () => {
         </select>
       </div>
       {loading
-        ? new Array(8)
-            .fill(0)
-            .map((_, index) => (
-              <div
-                key={index}
-                className="d-item col-lg-3 col-md-6 col-sm-6 col-xs-12"
-                style={{ width: "100%", height: "400px" }}
-              ></div>
-            ))
-
-        : exploreItems.map((item, index) => (
+        ? new Array(8).fill(0).map((_, index) => (
+            <div
+              key={index}
+              className="d-item col-lg-3 col-md-6 col-sm-6 col-xs-12"
+              style={{ display: "block", backgroundSize: "cover" }}
+            >
+              <Skeleton width="100%" height="400px" />
+            </div>
+          ))
+        : exploreItems.slice(0, visibleCount).map((item, index) => (
             <div
               key={index}
               className="d-item col-lg-3 col-md-6 col-sm-6 col-xs-12"
@@ -103,9 +122,16 @@ const ExploreItems = () => {
             </div>
           ))}
       <div className="col-md-12 text-center">
-        <Link to="" id="loadmore" className="btn-main lead">
-          Load more
-        </Link>
+        {visibleCount < exploreItems.length && (
+          <Link
+            to=""
+            id="loadmore"
+            className="btn-main lead"
+            onClick={loadMore}
+          >
+            Load more
+          </Link>
+        )}
       </div>
     </>
   );
