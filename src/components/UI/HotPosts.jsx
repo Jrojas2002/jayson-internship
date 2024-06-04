@@ -107,7 +107,7 @@ const HotPosts = () => {
         : hotPosts.map((item) => (
             <div className="nft_coll">
                   <div className="nft_wrap">
-                    <Link to="/item-details">
+                    <Link to={`/item-details/${item.nftId}`}>
                       <img
                         src={item.nftImage}
                         className="lazy img-fluid"
@@ -116,7 +116,7 @@ const HotPosts = () => {
                     </Link>
                   </div>
                   <div className="nft_coll_pp">
-                    <Link to={`/author/${item.authorId}`}>
+                    <Link to={`/item-details/${item.authorId}`}>
                       <img
                         className="lazy pp-coll"
                         src={item.authorImage}
