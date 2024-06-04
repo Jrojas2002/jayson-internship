@@ -8,7 +8,6 @@ const ExploreItems = () => {
   const [exploreItems, setExploreItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [visibleCount, setVisibleCount] = useState(8);
-  const { id } = useParams();
 
   useEffect(() => {
     async function fetchExploreItems() {
