@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import Countdown from "../UI/Countdown";
 import Skeleton from "../UI/Skeleton";
@@ -8,6 +8,7 @@ const ExploreItems = () => {
   const [exploreItems, setExploreItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [visibleCount, setVisibleCount] = useState(8);
+  const { id } = useParams();
 
   useEffect(() => {
     async function fetchExploreItems() {
@@ -67,7 +68,7 @@ const ExploreItems = () => {
               <div className="nft__item">
                 <div className="author_list_pp">
                   <Link
-                    to="/author"
+                    to={`/author/${item.authorId}`}
                     data-bs-toggle="tooltip"
                     data-bs-placement="top"
                   >
@@ -121,6 +122,7 @@ const ExploreItems = () => {
               </div>
             </div>
           ))}
+
       <div className="col-md-12 text-center">
         {visibleCount < exploreItems.length && (
           <Link
